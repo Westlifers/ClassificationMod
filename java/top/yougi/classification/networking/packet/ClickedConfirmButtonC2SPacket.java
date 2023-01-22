@@ -1,7 +1,7 @@
 package top.yougi.classification.networking.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.network.NetworkEvent;
 import top.yougi.classification.capability.LevelCapabilityProvider;
 
@@ -30,7 +30,7 @@ public class ClickedConfirmButtonC2SPacket {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            Level level = ctx.get().getSender().getLevel();
+            ServerLevel level = ctx.get().getSender().getLevel();
             level.getCapability(LevelCapabilityProvider.LEVEL_CAPABILITY).ifPresent(
                 cap -> {
                     Map<String, List<String>> map = cap.getClassMap();

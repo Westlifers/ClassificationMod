@@ -11,9 +11,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import top.yougi.classification.networking.ModMessages;
+import top.yougi.classification.networking.packet.ClickedConfirmButtonC2SPacket;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class ClassManagerScreen extends AbstractContainerScreen<ClassManagerMenu> {
 	private final static HashMap<String, Object> guistate = ClassManagerMenu.guistate;
@@ -113,8 +117,22 @@ public class ClassManagerScreen extends AbstractContainerScreen<ClassManagerMenu
 		this.addWidget(this.ClassName);
 		this.addRenderableWidget(new Button(this.leftPos + 135, this.topPos + 34, 61, 20, Component.literal("确认"),
 				e -> {
-					// 点击后的逻辑
-
+					// 获取GUI上的数据
+					List<String> items = new ArrayList<>();
+					for (int i=0; i<9; i++) {
+						Item item = this.getMenu().getSlot(i).getItem().getItem();
+						if (item != ItemStack.EMPTY.getItem()) {
+							items.add(item.getDescriptionId());
+						}
+					}
+					// items去重
+					Set<String> set = new HashSet<>(items);
+					List<String> items_ = new ArrayList<>(set);
+					String className = this.ClassName.getValue();
+					// 发包
+					ModMessages.sendToServer(new ClickedConfirmButtonC2SPacket(items_, className));
+					// 关闭
+					this.minecraft.player.closeContainer();
 				}
 		));
 	}

@@ -1,19 +1,14 @@
 package top.yougi.classification.event;
 
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.commons.lang3.RandomStringUtils;
 import top.yougi.classification.Classification;
 import top.yougi.classification.networking.ModMessages;
 import top.yougi.classification.networking.packet.VKeyPressedC2SPacket;
 import top.yougi.classification.util.KeyBinding;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = Classification.MODID, value = Dist.CLIENT)

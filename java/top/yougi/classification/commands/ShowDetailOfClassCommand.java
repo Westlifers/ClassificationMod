@@ -2,15 +2,11 @@ package top.yougi.classification.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import top.yougi.classification.capability.LevelCapabilityProvider;
 
 import java.util.List;
@@ -42,7 +38,7 @@ public class ShowDetailOfClassCommand {
                                         for (Map.Entry<String, List<String>> entry: map.entrySet()) {
                                             if (Objects.equals(entry.getKey(), className)) {
                                                 for (String item: entry.getValue()) {
-                                                    rep.append("\n").append(item);
+                                                    rep.append("\n").append(I18n.get(item));
                                                 }
                                             }
                                         }

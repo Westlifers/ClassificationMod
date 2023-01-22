@@ -10,7 +10,6 @@ import top.yougi.classification.capability.LevelCapabilityProvider;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class DeleteClassCommand {
     public DeleteClassCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
