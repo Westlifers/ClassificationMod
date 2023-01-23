@@ -7,6 +7,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import top.yougi.classification.Classification;
+import top.yougi.classification.networking.packet.ClickChestWhenSneakingC2SPacket;
 import top.yougi.classification.networking.packet.ClickedConfirmButtonC2SPacket;
 import top.yougi.classification.networking.packet.RightClickedBlockEntityC2SPacket;
 import top.yougi.classification.networking.packet.VKeyPressedC2SPacket;
@@ -44,6 +45,12 @@ public class ModMessages {
                 .decoder(ClickedConfirmButtonC2SPacket::new)
                 .encoder(ClickedConfirmButtonC2SPacket::toBytes)
                 .consumerMainThread(ClickedConfirmButtonC2SPacket::handle)
+                .add();
+
+        net.messageBuilder(ClickChestWhenSneakingC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ClickChestWhenSneakingC2SPacket::new)
+                .encoder(ClickChestWhenSneakingC2SPacket::toBytes)
+                .consumerMainThread(ClickChestWhenSneakingC2SPacket::handle)
                 .add();
     }
 

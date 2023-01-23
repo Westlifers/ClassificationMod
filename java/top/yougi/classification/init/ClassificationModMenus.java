@@ -10,10 +10,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import top.yougi.classification.Classification;
+import top.yougi.classification.client.gui.AddClassMenu;
 import top.yougi.classification.client.gui.ClassManagerMenu;
 
 public class ClassificationModMenus {
 	public static final DeferredRegister<MenuType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Classification.MODID);
 	public static final RegistryObject<MenuType<ClassManagerMenu>> CLASS_MANAGER = REGISTRY.register("class_manager",
 			() -> IForgeMenuType.create(ClassManagerMenu::new));
+	public static final RegistryObject<MenuType<AddClassMenu>> ADD_CLASS = REGISTRY.register("add_class",
+			() -> IForgeMenuType.create(AddClassMenu::new));
 }

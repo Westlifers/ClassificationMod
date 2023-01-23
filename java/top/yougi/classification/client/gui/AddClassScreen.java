@@ -11,40 +11,36 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import top.yougi.classification.networking.ModMessages;
-import top.yougi.classification.networking.packet.ClickedConfirmButtonC2SPacket;
 
-import java.util.*;
+import java.util.HashMap;
 
-public class ClassManagerScreen extends AbstractContainerScreen<ClassManagerMenu> {
-	private final static HashMap<String, Object> guistate = ClassManagerMenu.guistate;
+public class AddClassScreen extends AbstractContainerScreen<AddClassMenu> {
+	private final static HashMap<String, Object> guistate = AddClassMenu.guistate;
 	private final Level world;
 	private final int x, y, z;
 	private final Player entity;
-	EditBox ClassName;
+	EditBox ClassAdded;
 
-	public ClassManagerScreen(ClassManagerMenu container, Inventory inventory, Component text) {
+	public AddClassScreen(AddClassMenu container, Inventory inventory, Component text) {
 		super(container, inventory, text);
 		this.world = container.world;
 		this.x = container.x;
 		this.y = container.y;
 		this.z = container.z;
 		this.entity = container.entity;
-		this.imageWidth = 210;
-		this.imageHeight = 180;
+		this.imageWidth = 170;
+		this.imageHeight = 80;
 	}
 
-	private static final ResourceLocation texture = new ResourceLocation("classification:textures/screens/class_manager.png");
+	private static final ResourceLocation texture = new ResourceLocation("classification:textures/screens/add_class.png");
 
 	@Override
 	public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(ms);
 		super.render(ms, mouseX, mouseY, partialTicks);
 		this.renderTooltip(ms, mouseX, mouseY);
-		ClassName.render(ms, mouseX, mouseY, partialTicks);
+		ClassAdded.render(ms, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
@@ -63,20 +59,20 @@ public class ClassManagerScreen extends AbstractContainerScreen<ClassManagerMenu
 			this.minecraft.player.closeContainer();
 			return true;
 		}
-		if (ClassName.isFocused())
-			return ClassName.keyPressed(key, b, c);
+		if (ClassAdded.isFocused())
+			return ClassAdded.keyPressed(key, b, c);
 		return super.keyPressed(key, b, c);
 	}
 
 	@Override
 	public void containerTick() {
 		super.containerTick();
-		ClassName.tick();
+		ClassAdded.tick();
 	}
 
 	@Override
 	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
-		this.font.draw(poseStack, "添加分类", 93, 13, -12829636);
+		this.font.draw(poseStack, "设置分类", 65, 8, -12829636);
 	}
 
 	@Override
@@ -89,16 +85,20 @@ public class ClassManagerScreen extends AbstractContainerScreen<ClassManagerMenu
 	public void init() {
 		super.init();
 		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-		ClassName = new EditBox(this.font, this.leftPos + 11, this.topPos + 34, 120, 20, Component.literal("DefaultName")) {
+		this.addRenderableWidget(new Button(this.leftPos + 24, this.topPos + 51, 35, 20, Component.literal("验证"), e -> {
+		}));
+		this.addRenderableWidget(new Button(this.leftPos + 108, this.topPos + 51, 35, 20, Component.literal("确认"), e -> {
+		}));
+		ClassAdded = new EditBox(this.font, this.leftPos + 24, this.topPos + 23, 120, 20, Component.literal("DefaulClass")) {
 			{
-				setSuggestion("DefaultName");
+				setSuggestion("DefaulClass");
 			}
 
 			@Override
 			public void insertText(String text) {
 				super.insertText(text);
 				if (getValue().isEmpty())
-					setSuggestion("DefaultName");
+					setSuggestion("DefaulClass");
 				else
 					setSuggestion(null);
 			}
@@ -107,33 +107,13 @@ public class ClassManagerScreen extends AbstractContainerScreen<ClassManagerMenu
 			public void moveCursorTo(int pos) {
 				super.moveCursorTo(pos);
 				if (getValue().isEmpty())
-					setSuggestion("DefaultName");
+					setSuggestion("DefaulClass");
 				else
 					setSuggestion(null);
 			}
 		};
-		guistate.put("text:ClassName", ClassName);
-		ClassName.setMaxLength(32767);
-		this.addWidget(this.ClassName);
-		this.addRenderableWidget(new Button(this.leftPos + 135, this.topPos + 34, 61, 20, Component.literal("确认"),
-				e -> {
-					// 获取GUI上的数据
-					List<String> items = new ArrayList<>();
-					for (int i=0; i<9; i++) {
-						Item item = this.getMenu().getSlot(i).getItem().getItem();
-						if (item != ItemStack.EMPTY.getItem()) {
-							items.add(item.getDescriptionId());
-						}
-					}
-					// items去重
-					Set<String> set = new HashSet<>(items);
-					List<String> items_ = new ArrayList<>(set);
-					String className = this.ClassName.getValue();
-					// 发包
-					ModMessages.sendToServer(new ClickedConfirmButtonC2SPacket(items_, className));
-					// 关闭
-					this.minecraft.player.closeContainer();
-				}
-		));
+		guistate.put("text:ClassAdded", ClassAdded);
+		ClassAdded.setMaxLength(32767);
+		this.addWidget(this.ClassAdded);
 	}
 }
