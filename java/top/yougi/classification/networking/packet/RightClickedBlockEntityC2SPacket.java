@@ -24,7 +24,7 @@ public class RightClickedBlockEntityC2SPacket {
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-
+        buf.writeBlockPos(this.blockPos);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {

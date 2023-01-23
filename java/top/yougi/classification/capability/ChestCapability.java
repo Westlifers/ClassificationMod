@@ -14,6 +14,7 @@ public class ChestCapability {
     }
 
     public void saveNBTData(CompoundTag nbt) {
+        // BUG: save | load fail sometimes
         nbt.putString("ClassName", this.ClassName);
     }
 

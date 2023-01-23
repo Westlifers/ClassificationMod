@@ -39,5 +39,6 @@ public class ClickedConfirmButtonC2SPacket {
                 }
             );
         });
+        ctx.get().setPacketHandled(true);
     }
 }
