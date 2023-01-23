@@ -1,15 +1,12 @@
 package top.yougi.classification.event;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -24,6 +21,7 @@ import top.yougi.classification.capability.LevelCapabilityProvider;
 import top.yougi.classification.commands.DeleteClassCommand;
 import top.yougi.classification.commands.ListAllClassCommand;
 import top.yougi.classification.commands.ShowDetailOfClassCommand;
+import top.yougi.classification.libs.Libs;
 
 @Mod.EventBusSubscriber(modid = Classification.MODID)
 public class ModEvents {
@@ -51,41 +49,10 @@ public class ModEvents {
         BlockEntity blockEntity = level.getBlockEntity(pos);
 
        if (state.getBlock() instanceof ChestBlock) {
-           ChestType type = state.getValue(BlockStateProperties.CHEST_TYPE);
-           Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+           if (!Libs.isSingleChest(state)) {
 
-           BlockPos nearPos;
-           if (!type.equals(ChestType.SINGLE)) {
-               if (type.equals(ChestType.LEFT)) {
-                   if (facing.equals(Direction.NORTH)) {
-                       nearPos = pos.offset(1, 0, 0);
-                   }
-                   else if (facing.equals(Direction.SOUTH)) {
-                       nearPos = pos.offset(-1, 0, 0);
-                   }
-                   else if (facing.equals(Direction.EAST)) {
-                       nearPos = pos.offset(0, 0, 1);
-                   }
-                   else {
-                       nearPos = pos.offset(0, 0, -1);
-                   }
-               }
-               else {
-                   if (facing.equals(Direction.NORTH)) {
-                       nearPos = pos.offset(-1, 0, 0);
-                   }
-                   else if (facing.equals(Direction.SOUTH)) {
-                       nearPos = pos.offset(1, 0, 0);
-                   }
-                   else if (facing.equals(Direction.EAST)) {
-                       nearPos = pos.offset(0, 0, -1);
-                   }
-                   else {
-                       nearPos = pos.offset(0, 0, 1);
-                   }
-               }
+               BlockEntity nearBlockEntity = Libs.getNearChestEntity(state, pos, level);
 
-               BlockEntity nearBlockEntity = level.getBlockEntity(nearPos);
                if (nearBlockEntity.getCapability(ChestCapabilityProvider.CHEST_CAPABILITY).isPresent()) {
                    nearBlockEntity.getCapability(ChestCapabilityProvider.CHEST_CAPABILITY).ifPresent(cap -> {
                        blockEntity.getCapability(ChestCapabilityProvider.CHEST_CAPABILITY).ifPresent(cap_ -> {
