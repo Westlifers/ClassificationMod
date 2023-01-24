@@ -15,7 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import top.yougi.classification.networking.ModMessages;
-import top.yougi.classification.networking.packet.ClickedConfirmButtonC2SPacket;
+import top.yougi.classification.networking.packet.ClickedConfirmButtonInManagerC2SPacket;
 
 import java.util.*;
 
@@ -130,7 +130,7 @@ public class ClassManagerScreen extends AbstractContainerScreen<ClassManagerMenu
 					List<String> items_ = new ArrayList<>(set);
 					String className = this.ClassName.getValue();
 					// 发包
-					ModMessages.sendToServer(new ClickedConfirmButtonC2SPacket(items_, className));
+					ModMessages.sendToServer(new ClickedConfirmButtonInManagerC2SPacket(items_, className));
 					// 关闭
 					this.minecraft.player.closeContainer();
 				}

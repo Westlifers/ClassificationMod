@@ -38,10 +38,10 @@ public class ModMessages {
                 .consumerMainThread(RightClickedBlockEntityC2SPacket::handle)
                 .add();
 
-        net.messageBuilder(ClickedConfirmButtonC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ClickedConfirmButtonC2SPacket::new)
-                .encoder(ClickedConfirmButtonC2SPacket::toBytes)
-                .consumerMainThread(ClickedConfirmButtonC2SPacket::handle)
+        net.messageBuilder(ClickedConfirmButtonInManagerC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ClickedConfirmButtonInManagerC2SPacket::new)
+                .encoder(ClickedConfirmButtonInManagerC2SPacket::toBytes)
+                .consumerMainThread(ClickedConfirmButtonInManagerC2SPacket::handle)
                 .add();
 
         net.messageBuilder(ClickChestWhenSneakingWithMainHandEmptyC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
@@ -54,6 +54,12 @@ public class ModMessages {
                 .decoder(SyncLevelDataS2CPacket::new)
                 .encoder(SyncLevelDataS2CPacket::toBytes)
                 .consumerMainThread(SyncLevelDataS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(ClickedConfirmButtonInChestC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ClickedConfirmButtonInChestC2SPacket::new)
+                .encoder(ClickedConfirmButtonInChestC2SPacket::toBytes)
+                .consumerMainThread(ClickedConfirmButtonInChestC2SPacket::handle)
                 .add();
     }
 

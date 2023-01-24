@@ -9,16 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class ClickedConfirmButtonC2SPacket {
+public class ClickedConfirmButtonInManagerC2SPacket {
     private List<String> items;
     private String ClassName;
 
-    public ClickedConfirmButtonC2SPacket(List<String> items, String ClassName) {
+    public ClickedConfirmButtonInManagerC2SPacket(List<String> items, String ClassName) {
         this.ClassName = ClassName;
         this.items = items;
     }
 
-    public ClickedConfirmButtonC2SPacket(FriendlyByteBuf buf) {
+    public ClickedConfirmButtonInManagerC2SPacket(FriendlyByteBuf buf) {
         this.ClassName = buf.readUtf();
         this.items = buf.readList(FriendlyByteBuf::readUtf);
     }

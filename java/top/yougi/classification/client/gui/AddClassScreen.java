@@ -14,6 +14,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import top.yougi.classification.client.ClientLevelData;
+import top.yougi.classification.networking.ModMessages;
+import top.yougi.classification.networking.packet.ClickedConfirmButtonInChestC2SPacket;
 
 import java.util.HashMap;
 import java.util.List;
@@ -95,8 +97,16 @@ public class AddClassScreen extends AbstractContainerScreen<AddClassMenu> {
 			else {
 				this.ClassAdded.setTextColor(0xff0000);
 			}
+			this.ClassAdded.setFocus(true);
 		}));
 		this.addRenderableWidget(new Button(this.leftPos + 108, this.topPos + 51, 35, 20, Component.literal("确认"), e -> {
+			if (isValid(this.ClassAdded.getValue())) {
+				ModMessages.sendToServer(new ClickedConfirmButtonInChestC2SPacket(this.ClassAdded.getValue(), this.getMenu().pos));
+				this.minecraft.player.closeContainer();
+			}
+			else {
+				this.ClassAdded.setTextColor(0xff0000);
+			}
 		}));
 
 		ClassAdded = new EditBox(this.font, this.leftPos + 24, this.topPos + 23, 120, 20, Component.literal("DefaulClass")) {
@@ -136,7 +146,6 @@ public class AddClassScreen extends AbstractContainerScreen<AddClassMenu> {
 				break;
 			}
 		}
-		System.out.println(valid);
 		return valid;
 	}
 }
