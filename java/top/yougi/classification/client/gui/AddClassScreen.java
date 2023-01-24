@@ -7,27 +7,29 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import top.yougi.classification.client.ClientLevelData;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 public class AddClassScreen extends AbstractContainerScreen<AddClassMenu> {
 	private final static HashMap<String, Object> guistate = AddClassMenu.guistate;
-	private final Level world;
-	private final int x, y, z;
+	private final Level level;
+	private final BlockPos pos;
 	private final Player entity;
 	EditBox ClassAdded;
 
 	public AddClassScreen(AddClassMenu container, Inventory inventory, Component text) {
 		super(container, inventory, text);
-		this.world = container.world;
-		this.x = container.x;
-		this.y = container.y;
-		this.z = container.z;
+		this.level = container.level;
+		this.pos = container.pos;
 		this.entity = container.entity;
 		this.imageWidth = 170;
 		this.imageHeight = 80;
@@ -86,19 +88,27 @@ public class AddClassScreen extends AbstractContainerScreen<AddClassMenu> {
 		super.init();
 		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		this.addRenderableWidget(new Button(this.leftPos + 24, this.topPos + 51, 35, 20, Component.literal("验证"), e -> {
+			String className = this.ClassAdded.getValue();
+			if (isValid(className)) {
+				this.ClassAdded.setTextColor(0x00ff00);
+			}
+			else {
+				this.ClassAdded.setTextColor(0xff0000);
+			}
 		}));
 		this.addRenderableWidget(new Button(this.leftPos + 108, this.topPos + 51, 35, 20, Component.literal("确认"), e -> {
 		}));
+
 		ClassAdded = new EditBox(this.font, this.leftPos + 24, this.topPos + 23, 120, 20, Component.literal("DefaulClass")) {
 			{
-				setSuggestion("DefaulClass");
+				setSuggestion("DefaultClass");
 			}
 
 			@Override
 			public void insertText(String text) {
 				super.insertText(text);
 				if (getValue().isEmpty())
-					setSuggestion("DefaulClass");
+					setSuggestion("DefaultClass");
 				else
 					setSuggestion(null);
 			}
@@ -107,7 +117,7 @@ public class AddClassScreen extends AbstractContainerScreen<AddClassMenu> {
 			public void moveCursorTo(int pos) {
 				super.moveCursorTo(pos);
 				if (getValue().isEmpty())
-					setSuggestion("DefaulClass");
+					setSuggestion("DefaultClass");
 				else
 					setSuggestion(null);
 			}
@@ -115,5 +125,18 @@ public class AddClassScreen extends AbstractContainerScreen<AddClassMenu> {
 		guistate.put("text:ClassAdded", ClassAdded);
 		ClassAdded.setMaxLength(32767);
 		this.addWidget(this.ClassAdded);
+	}
+
+	private boolean isValid(String className) {
+		List<String> classNames = ClientLevelData.getClassNames();
+		boolean valid = false;
+		for (String name: classNames) {
+			if (Objects.equals(name, className)) {
+				valid = true;
+				break;
+			}
+		}
+		System.out.println(valid);
+		return valid;
 	}
 }

@@ -1,6 +1,7 @@
 package top.yougi.classification.event;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -10,7 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.yougi.classification.Classification;
 import top.yougi.classification.networking.ModMessages;
-import top.yougi.classification.networking.packet.RightClickedBlockEntityC2SPacket;
+import top.yougi.classification.networking.packet.ClickChestWhenSneakingWithMainHandEmptyC2SPacket;
 import top.yougi.classification.networking.packet.VKeyPressedC2SPacket;
 import top.yougi.classification.util.KeyBinding;
 
@@ -26,13 +27,14 @@ public class ClientEvents {
             }
         }
 
-        // 测试代码
+        // 空手潜行右键箱子打开分类设置页面
         @SubscribeEvent
         public static void onPlayerRightClickedChest(PlayerInteractEvent.RightClickBlock event) {
             BlockPos pos = event.getPos();
             BlockEntity entity = event.getLevel().getBlockEntity(pos);
-            if (entity != null) {
-                ModMessages.sendToServer(new RightClickedBlockEntityC2SPacket(pos));
+            Player player = event.getEntity();
+            if (entity != null && player.isShiftKeyDown() && player.getMainHandItem().isEmpty()) {
+                ModMessages.sendToServer(new ClickChestWhenSneakingWithMainHandEmptyC2SPacket(pos));
             }
         }
     }

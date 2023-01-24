@@ -1,5 +1,6 @@
 package top.yougi.classification.networking.packet;
 
+import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -15,18 +16,19 @@ import top.yougi.classification.client.gui.AddClassMenu;
 
 import java.util.function.Supplier;
 
-public class ClickChestWhenSneakingC2SPacket {
+public class ClickChestWhenSneakingWithMainHandEmptyC2SPacket {
+    private BlockPos pos;
 
-    public ClickChestWhenSneakingC2SPacket() {
-
+    public ClickChestWhenSneakingWithMainHandEmptyC2SPacket(BlockPos pos) {
+        this.pos = pos;
     }
 
-    public ClickChestWhenSneakingC2SPacket(FriendlyByteBuf buf) {
-
+    public ClickChestWhenSneakingWithMainHandEmptyC2SPacket(FriendlyByteBuf buf) {
+        this.pos = buf.readBlockPos();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-
+        buf.writeBlockPos(this.pos);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
@@ -35,7 +37,7 @@ public class ClickChestWhenSneakingC2SPacket {
             assert player != null;
             ServerLevel level = player.getLevel();
 
-            BlockPos pos = player.getOnPos();
+            BlockPos pos = this.pos;
 
             NetworkHooks.openScreen(player, new MenuProvider() {
                 @Override
@@ -45,10 +47,9 @@ public class ClickChestWhenSneakingC2SPacket {
 
                 @Override
                 public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-                    return new AddClassMenu(id, inventory, null);
+                    return new AddClassMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(pos));
                 }
             }, pos);
-
         });
         ctx.get().setPacketHandled(true);
     }
