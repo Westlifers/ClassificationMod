@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import top.yougi.classification.config.ModConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,7 @@ public class Libs {
     }
 
     public static List<BlockEntity> getAllChestEntitiesInRange(BlockPos playerPos, ServerLevel level) {
-        int range = 10;
+        int range = ModConfig.searchRange.get();
         List<BlockEntity> blockEntities = new ArrayList<>();
         for (int x = (int) Math.floor(playerPos.getX()-range); x < (int) Math.ceil(playerPos.getX()+range); x++) {
             for (int y = (int) Math.floor(playerPos.getY()-range); y < (int) Math.ceil(playerPos.getY()+range); y++) {

@@ -32,12 +32,6 @@ public class ModMessages {
                 .consumerMainThread(VKeyPressedC2SPacket::handle)
                 .add();
 
-        net.messageBuilder(RightClickedBlockEntityC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(RightClickedBlockEntityC2SPacket::new)
-                .encoder(RightClickedBlockEntityC2SPacket::toBytes)
-                .consumerMainThread(RightClickedBlockEntityC2SPacket::handle)
-                .add();
-
         net.messageBuilder(ClickedConfirmButtonInManagerC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ClickedConfirmButtonInManagerC2SPacket::new)
                 .encoder(ClickedConfirmButtonInManagerC2SPacket::toBytes)

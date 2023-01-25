@@ -63,7 +63,6 @@ public class ClassificationC2SPacket {
                                                 // case1: 遇到空格，直接放进去
                                                 player.getInventory().setItem(player.getInventory().findSlotMatchingItem(itemStack), ItemStack.EMPTY);
                                                 cap.insertItem(i, itemStack, false);
-                                                System.out.println("found empty");
                                                 break;
                                             }
                                             else {
@@ -76,21 +75,15 @@ public class ClassificationC2SPacket {
                                                     // 如果不够，直接放进去
                                                     player.getInventory().setItem(player.getInventory().findSlotMatchingItem(itemStack), ItemStack.EMPTY);
                                                     cap.insertItem(i, itemStack, false);
-                                                    System.out.println("found half but put all");
                                                     break;
                                                 }
                                                 else {
                                                     // 如果溢出，减去可放的个数，再把箱子这个位置设成满
-                                                    System.out.println(itemStack.getCount());
-                                                    System.out.println(countAvailable);
-
                                                     int w = player.getInventory().findSlotMatchingItem(itemStack);
                                                     itemStack.setCount(itemStack.getCount() - countAvailable);
 
                                                     player.getInventory().setItem(w, itemStack);
                                                     cap.getStackInSlot(i).setCount(itemStack.getMaxStackSize());
-
-                                                    System.out.println("found half");
                                                 }
                                             }
                                         }
