@@ -6,11 +6,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.yougi.classification.Classification;
 import top.yougi.classification.networking.ModMessages;
+import top.yougi.classification.networking.packet.ClassificationC2SPacket;
 import top.yougi.classification.networking.packet.ClickChestWhenSneakingWithMainHandEmptyC2SPacket;
 import top.yougi.classification.networking.packet.VKeyPressedC2SPacket;
 import top.yougi.classification.util.KeyBinding;
@@ -35,6 +37,14 @@ public class ClientEvents {
             Player player = event.getEntity();
             if (entity != null && player.isShiftKeyDown() && player.getMainHandItem().isEmpty()) {
                 ModMessages.sendToServer(new ClickChestWhenSneakingWithMainHandEmptyC2SPacket(pos));
+            }
+        }
+
+        // GUI内按键分类
+        @SubscribeEvent
+        public static void onPlayerTappedVKeyInScreen(ScreenEvent.KeyPressed event) {
+            if (event.getKeyCode() == 86) {
+                ModMessages.sendToServer(new ClassificationC2SPacket());
             }
         }
     }

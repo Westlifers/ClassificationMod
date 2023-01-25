@@ -61,6 +61,12 @@ public class ModMessages {
                 .encoder(ClickedConfirmButtonInChestC2SPacket::toBytes)
                 .consumerMainThread(ClickedConfirmButtonInChestC2SPacket::handle)
                 .add();
+
+        net.messageBuilder(ClassificationC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ClassificationC2SPacket::new)
+                .encoder(ClassificationC2SPacket::toBytes)
+                .consumerMainThread(ClassificationC2SPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {
