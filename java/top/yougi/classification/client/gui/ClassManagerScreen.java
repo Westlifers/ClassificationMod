@@ -129,6 +129,10 @@ public class ClassManagerScreen extends AbstractContainerScreen<ClassManagerMenu
 					Set<String> set = new HashSet<>(items);
 					List<String> items_ = new ArrayList<>(set);
 					String className = this.ClassName.getValue();
+					// 不允许使用空名称或空分类
+					if (className.equals("") | items_.size() == 0) {
+						return;
+					}
 					// 发包
 					ModMessages.sendToServer(new ClickedConfirmButtonInManagerC2SPacket(items_, className));
 					// 关闭
